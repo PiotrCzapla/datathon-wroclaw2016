@@ -1,17 +1,12 @@
 #!/usr/bin/env python3.5
-# -*- coding: latin-1 -*-
+# -*- coding: utf-8 -*-
 
 import sys
 import csv
-#import unicodecsv as csv
 import json
 import numpy
-#import polyglot
 from polyglot.text import Text, Word
 
-
-#2016
-# Lp;Data;Wiek;Plec;Kod_Pocztowy;Zrodlo;Rejonowy_250;Rejonowy_750;Ogolno_1;Ogolno_2
 
 def add_vote(dic, proj, age):
   try:
@@ -39,7 +34,7 @@ with open('data/2016-12-03-WBO_lista_glosow_2016.csv', 'r') as csvvotes:
   reader = csv.reader(csvvotes, delimiter=';')
   for row in reader:
     #2016
-    # Wiek=2 6Rejonowy_250;7Rejonowy_750;8Ogolno_1;9Ogolno_2
+    # Lp;Data;Wiek;Plec;Kod_Pocztowy;Zrodlo;Rejonowy_250;Rejonowy_750;Ogolno_1;Ogolno_2
     add_vote(votes2016, row[6], row[2])
     add_vote(votes2016, row[7], row[2])
     add_vote(votes2016, row[8], row[2])
@@ -63,11 +58,24 @@ def gen_year(votes, srcfile, outfile, pointfile=None):
               w.writerow([k, p['latitude'], p['longitude']])
 
       writer = csv.writer(csvfile, delimiter=",")
-      writer.writerow(['id', 'status', 'votes', 'title', 'avg_age', 'polarity', 'budget', 'point/cost', 'points', 'category', 'level', 'district', 'detailed_localization', 'description', 'attachments'])
+      writer.writerow(['id',
+                       'status',
+                       'votes',
+                       'title',
+                       'avg_age',
+                       'polarity',
+                       'budget',
+                       'point/cost',
+                       'points',
+                       'category',
+                       'level',
+                       'district',
+                       'detailed_localization',
+                       'description',
+                       'attachments'])
+
       for k in sorted(j.keys(), key=int):
         proj = j[k]
-        #print json.dumps(proj, sort_keys=True, indent=4, separators=(',', ': '))
-        # status, category, votes, attachments, district, points (latitude, longitude),
 
         status = "bd"
         s = proj["status"]
@@ -79,8 +87,6 @@ def gen_year(votes, srcfile, outfile, pointfile=None):
           status = "wybrany"
         elif "Projekt" in s:
           status = "wycofany"
-
-
 
         text = Text(proj['title']+proj['description'])
         polarity = 0
