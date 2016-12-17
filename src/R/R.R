@@ -1,20 +1,12 @@
 library(tidyverse)
 library(plotly)
 
-path <- 'C:\\Users\\W³aœciciel\\Documents\\Wroc³awskie Dane\\WBO\\WBO_lista_glosow_2016.csv'
+path <- '../../data/2016-12-03-WBO_lista_glosow_2016.csv'
 data <- read.csv(path, header = T, sep = ';')
 
 data %>%
-  mutate(tmp = Ogolno_2) %>%
-  filter(tmp != 0) %>%
-  inner_join(data %>%
-               mutate(tmp = Ogolno_1) %>%
-               filter(tmp != 0), by='tmp')
-
-data %>%
   group_by(Zrodlo, Plec) %>%
-  summarise(Wiek_sr=mean(Wiek),
-            Wiek_md=median(Wiek))
+  mutate(Wiek_m = Wiek/mean(Wiek))
 
 data_o <- data %>%
   select(c(Ogolno_1, Ogolno_2)) %>%
