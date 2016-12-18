@@ -42,7 +42,7 @@ with open('data/2016-12-03-WBO_lista_glosow_2016.csv', 'r') as csvvotes:
 
 
 def gen_year(votes, srcfile, outfile, pointfile=None):
-  print("generating: ", outfile)
+  print('generating: ', outfile)
   with open(srcfile, 'r') as f:
     j = json.load(f)
 
@@ -50,14 +50,14 @@ def gen_year(votes, srcfile, outfile, pointfile=None):
 
       if pointfile:
         with open(pointfile, 'w') as pf:
-          print("generating: ", pointfile)
+          print('generating: ', pointfile)
           for k in sorted(j.keys(), key=int):
             proj = j[k]
-            w = csv.writer(pf, delimiter=",")
+            w = csv.writer(pf, delimiter=',')
             for p in proj['points']:
               w.writerow([k, p['latitude'], p['longitude']])
 
-      writer = csv.writer(csvfile, delimiter=",")
+      writer = csv.writer(csvfile, delimiter=',')
       writer.writerow(['id',
                        'status',
                        'votes',
@@ -77,16 +77,16 @@ def gen_year(votes, srcfile, outfile, pointfile=None):
       for k in sorted(j.keys(), key=int):
         proj = j[k]
 
-        status = "bd"
-        s = proj["status"]
-        if "Nie wybrany" in s:
-          status = "niewybrany"
-        elif "wycofany" in s:
-          status = "wycofany"
-        elif "Wybrany" in s:
-          status = "wybrany"
-        elif "Projekt" in s:
-          status = "wycofany"
+        status = 'bd'
+        s = proj['status']
+        if 'Nie wybrany' in s:
+          status = 'niewybrany'
+        elif 'wycofany' in s:
+          status = 'wycofany'
+        elif 'Wybrany' in s:
+          status = 'wybrany'
+        elif 'Projekt' in s:
+          status = 'wycofany'
 
         text = Text(proj['title']+proj['description'])
         polarity = 0
