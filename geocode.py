@@ -7,10 +7,13 @@ import csv
 import sys
 import argparse as ap
 import time
+import re
 
 # https://developers.google.com/maps/documentation/geocoding/start#get-a-key
 APIKEY=''
 zipcode_file='data/keys.csv'
+
+RE_ZIPCODE = re.compile(r'[0-9]{2,2}-[0-9]{3,3}')
 
 geolocator = GoogleV3(api_key=APIKEY, timeout=10)
 
@@ -47,6 +50,7 @@ with open(zipcode_file, 'a+') as kcsv:
       return locfind(c)
 
   def newvotes(legend, oldfile, newfile, zipindex):
+    global RE_ZIPCODE
 
     with open(newfile, 'w') as csvvotesnew:
       writer = csv.writer(csvvotesnew)
@@ -56,8 +60,12 @@ with open(zipcode_file, 'a+') as kcsv:
         reader = csv.reader(csvvotes, delimiter=';')
         for row in reader:
           code = row[zipindex]
-          if len(code) == 5:
-            code = code[:2]+'-'+code[2:]
+          if code and not RE_ZIPCODE.match(code):
+            print('Found bad zipcode:', code)
+            print(row)
+            csvvotesnew.close()
+            csvvotes.close()
+            sys.exit(1)
           latlon = [0, 0]
           try:
             latlon = codes[code]
